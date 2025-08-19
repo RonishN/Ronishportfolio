@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ronish Neupane | Game Developer</title>
+    <!-- Minimalist Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Basic Setup and Typography */
+        body {
+            font-family: 'Roboto Mono', monospace;
+            background-color: #ffffff;
+            color: #333;
+            margin: 0;
+            padding: 8vh 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            box-sizing: border-box;
+            transition: background-color 0.5s ease-in-out; /* Match transition time */
+        }
+
+        /* Main container for the two-column layout */
+        .container {
+            display: flex;
+            width: 90%;
+            max-width: 1100px;
+            position: relative;
+        }
+
+        /* Left Column: Navigation */
+        .navigation {
+            width: 220px;
+            padding-right: 40px;
+            flex-shrink: 0;
+        }
+       
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 2em;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .nav-menu li {
+            margin-bottom: 0.8em;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #333;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease;
+            display: inline-block;
+            padding: 4px 6px;
+            margin: -4px -6px;
+            border-radius: 3px;
+        }
+       
+        .nav-menu a.active {
+            color: #000;
+            background-color: #e8e8e8;
+        }
+       
+        .nav-menu a .hash {
+            visibility: hidden;
+            font-weight: 700;
+        }
+
+        .nav-menu a.active .hash {
+            visibility: visible;
+        }
+
+        /* Center Column: The vertical line */
+        .divider {
+            width: 1px;
+            /* DARKER LINE */
+            background-color: #bbb; 
+            margin-right: 50px;
+            /* SMOOTHER TRANSITION */
+            transition: background-color 0.5s ease-in-out;
+        }
+
+        /* Divider fade state */
+        body.is-transitioning .divider {
+            background-color: #f5f5f5; /* Lightened to blend more seamlessly */
+        }
+
+        /* Right Column: Content Display Area */
+        .content {
+            flex-grow: 1;
+            position: relative;
+            min-height: 550px;
+        }
+       
+        .content-panel {
+            opacity: 0;
+            visibility: hidden;
+            position: absolute;
+            width: 100%;
+            top: 0;
+            left: 0;
+            /* SMOOTHER TRANSITION: Longer duration for a graceful fade */
+            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+        }
+       
+        .content-panel.is-active {
+            opacity: 1;
+            visibility: visible;
+            position: relative;
+        }
+       
+        .content-panel h2 {
+            font-size: 1rem;
+            font-weight: normal;
+            margin-top: 0;
+            margin-bottom: 1.5em;
+            color: #555;
+        }
+
+        .content-panel h3 {
+            font-size: 1.1rem;
+            margin-top: 2.5em;
+            margin-bottom: 1em;
+            font-weight: 700;
+        }
+        
+        .content-panel h3 a {
+            color: #000;
+            text-decoration: none;
+            border-bottom: 2px solid #e0e0e0;
+            transition: border-color 0.2s ease;
+        }
+
+        .content-panel h3 a:hover {
+            border-color: #333;
+        }
+
+        .content-panel p {
+            font-size: 0.95rem;
+            line-height: 1.9;
+            max-width: 600px;
+        }
+        
+        .content-panel .tag {
+            display: inline-block;
+            background-color: #f0f0f0;
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            border-radius: 4px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .content-panel .meta-info {
+             font-size: 0.85rem;
+             color: #666;
+             margin-top: -0.5em;
+             margin-bottom: 1.5em;
+        }
+
+        .content-panel a {
+             color: #000;
+             font-weight: 700;
+             text-decoration: underline;
+        }
+
+        /* Experience Timeline Styles */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+            margin-top: 2em;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            bottom: 5px;
+            width: 2px;
+            background: #e0e0e0;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2em;
+        }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -25px;
+            top: 5px;
+            height: 12px;
+            width: 12px;
+            background-color: #333;
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+        
+        .timeline h3 {
+             margin-top: 0;
+             margin-bottom: 0.25em;
+        }
+
+        footer {
+            margin-top: 4em;
+            font-size: 0.8rem;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Left Navigation Panel -->
+        <nav class="navigation">
+            <div class="logo">Ronish Neupane</div>
+            <ul class="nav-menu">
+                <li><a href="#about" class="nav-link active"><span class="hash">#</span> I | about</a></li>
+                <li><a href="#projects" class="nav-link"><span class="hash">#</span> II | projects</a></li>
+                <li><a href="#experience" class="nav-link"><span class="hash">#</span> III | experience</a></li>
+                <li><a href="#contact" class="nav-link"><span class="hash">#</span> IV | contact</a></li>
+            </ul>
+        </nav>
+
+        <!-- Vertical Divider -->
+        <div class="divider"></div>
+
+        <!-- Right Content Panel -->
+        <main class="content">
+            <!-- ABOUT SECTION -->
+            <section id="about" class="content-panel is-active">
+                <h2>$ load scene("about")</h2>
+                <p>I build immersive 2D & 3D worlds with Unity and C#, focusing on optimized gameplay mechanics, robust architecture, and clean, performant code.</p>
+                <p>My toolkit includes Unity's URP, multiplayer networking (Netcode), AI behavior trees, physics systems, and shader development.</p>
+                <p>
+                    <a href="#" download>Download CV</a>
+                </p>
+            </section>
+
+            <!-- PROJECTS SECTION -->
+            <section id="projects" class="content-panel">
+                <h2>$ initialize_level("projects")</h2>
+                
+                <h3><a href=https://play.google.com/store/apps/details?id=com.DarkMatterGames.SpriteNInja&pcampaignid=web_share" target="_blank" rel="noopener noreferrer">Ninja Hattori Mobile Game</a></h3>
+                <p class="meta-info">Mobile Platformer @ Dark Matter | 700k+ downloads</p>
+                <p>Contributed to core gameplay mechanics and performance profiling for Android. Reduced build size and improved frame rates on low-end devices.</p>
+                <div><span class="tag">Unity</span> <span class="tag">C#</span> <span class="tag">Mobile Optimization</span></div>
+                
+                <h3><a href="https://play.google.com/store/apps/details?id=com.Darkmatter.kidsage&pcampaignid=web_share" target="_blank" rel="noopener noreferrer">Kids Age - Learning App</a></h3>
+                <p class="meta-info">Educational App @ Dark Matter | 1k+ downloads</p>
+                <p>Implemented several interactive learning modules for an international audience, including letter tracing and object counting, ensuring a responsive and child-friendly UI.</p>
+                <div><span class="tag">Unity</span> <span class="tag">C#</span> <span class="tag">Educational</span> <span class="tag">UI/UX</span></div>
+                
+                <h3><a href="https://play.google.com/store/apps/details?id=com.GameDevGamer.WordHoot&pcampaignid=web_share" target="_blank" rel="noopener noreferrer">Word Hoot - Word Game</a></h3>
+                <p class="meta-info">Mobile Puzzle Game | 200+ downloads</p>
+                <p>Developed core puzzle logic and the level progression system for this word-finding game with over 100 challenging levels.</p>
+                <div><span class="tag">Unity</span> <span class="tag">C#</span> <span class="tag">Game Logic</span></div>
+
+                <h3><a href="https://creepyug.darkmattergame.net/" target="_blank" rel="noopener noreferrer">First-Person PC Horror Game</a></h3>
+                <p class="meta-info">Company Project | In Development</p>
+                <p>Prototyping complex systems from scratch, featuring an AI behavior tree for enemy logic and a dynamic lighting engine for atmosphere.</p>
+                <div><span class="tag">Unity</span> <span class="tag">C#</span> <span class="tag">AI Behavior Trees</span> <span class="tag">URP</span></div>
+
+                <h3><a href="https://www.linkedin.com/in/ronish-neupane/" target="_blank" rel="noopener noreferrer">Unpublished & Game Jam Projects</a></h3>
+                <p class="meta-info">Company Project | In Development| Personal Projects | Game Jam</p>
+                <p>Beyond published titles, I have developed numerous prototypes exploring diverse genres, from physics-based puzzlers to narrative experiments, sharpening my rapid prototyping and creative problem-solving skills.</p>
+            </section>
+
+            <!-- EXPERIENCE SECTION -->
+            <section id="experience" class="content-panel">
+                <h2>$ render_timeline("experience")</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h3>Game Developer</h3>
+                        <p class="meta-info">OcherByte | Jul 2024 - Present</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h3>Game Development Intern</h3>
+                        <p class="meta-info">Dark Matter Game Production | Jan 2024 - Jun 2024</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CONTACT SECTION -->
+            <section id="contact" class="content-panel">
+                <h2>$ exec("get_in_touch")</h2>
+                <p>I'm always open to discussing new projects, creative ideas, or opportunities with an ambitious team.</p>
+                <p>
+                    <a href="mailto:your-email@example.com">Say Hello</a>
+                </p>
+            </section>
+
+            <footer>
+                Designed & Built by Ronish Neupane
+            </footer>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentPanels = document.querySelectorAll('.content-panel');
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    const currentActiveLink = document.querySelector('.nav-link.active');
+                    if (currentActiveLink === this) return; 
+
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetPanel = document.getElementById(targetId);
+                    
+                    // SMOOTHER TRANSITION LOGIC
+                    document.body.classList.add('is-transitioning'); 
+                    
+                    const activePanel = document.querySelector('.content-panel.is-active');
+                    if (activePanel) {
+                        activePanel.classList.remove('is-active');
+                    }
+                    
+                    currentActiveLink.classList.remove('active');
+                    this.classList.add('active');
+
+                    // After a short delay, start fading in the new content for a better crossfade
+                    setTimeout(() => {
+                        if (targetPanel) {
+                            targetPanel.classList.add('is-active');
+                        }
+                    }, 150); // Small delay to start the crossfade smoothly
+
+                    // After the main transition is complete, restore the divider line
+                    setTimeout(() => {
+                        document.body.classList.remove('is-transitioning');
+                    }, 500); // This duration MUST match the CSS transition-duration
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

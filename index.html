@@ -21,7 +21,7 @@
             align-items: flex-start;
             min-height: 100vh;
             box-sizing: border-box;
-            transition: background-color 0.5s ease-in-out; /* Match transition time */
+            transition: background-color 0.5s ease-in-out;
         }
 
         /* Main container for the two-column layout */
@@ -84,16 +84,13 @@
         /* Center Column: The vertical line */
         .divider {
             width: 1px;
-            /* DARKER LINE */
             background-color: #bbb; 
             margin-right: 50px;
-            /* SMOOTHER TRANSITION */
             transition: background-color 0.5s ease-in-out;
         }
 
-        /* Divider fade state */
         body.is-transitioning .divider {
-            background-color: #f5f5f5; /* Lightened to blend more seamlessly */
+            background-color: #f5f5f5;
         }
 
         /* Right Column: Content Display Area */
@@ -101,6 +98,7 @@
             flex-grow: 1;
             position: relative;
             min-height: 550px;
+            padding-bottom: 2em; 
         }
        
         .content-panel {
@@ -110,7 +108,6 @@
             width: 100%;
             top: 0;
             left: 0;
-            /* SMOOTHER TRANSITION: Longer duration for a graceful fade */
             transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
         }
        
@@ -215,10 +212,53 @@
         }
 
         footer {
-            margin-top: 4em;
+            position: absolute;
+            bottom: 0;
+            right: 0;
             font-size: 0.8rem;
             color: #888;
         }
+
+        /* --- RESPONSIVENESS: SHRINK DESIGN, DON'T RE-STACK --- */
+        @media (max-width: 900px) {
+            body {
+                /* Reduce vertical padding to give more screen real estate */
+                padding: 6vh 0;
+            }
+            .navigation {
+                /* Make the nav column narrower */
+                width: 140px;
+                padding-right: 20px;
+            }
+
+            .logo {
+                font-size: 1.3rem; /* Slightly smaller logo text */
+            }
+
+            .nav-menu a {
+                font-size: 0.9rem; /* Slightly smaller nav text */
+            }
+
+            .divider {
+                 /* Reduce space next to the divider */
+                margin-right: 25px;
+            }
+
+            .content {
+                min-height: auto; /* Allow height to be more flexible */
+            }
+            
+            .content-panel h3 {
+                font-size: 1.05rem; /* Slightly smaller titles */
+            }
+
+            .content-panel p {
+                 /* Slightly smaller body text for better fit */
+                font-size: 0.9rem;
+                line-height: 1.8;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -246,7 +286,7 @@
                 <p>I build immersive 2D & 3D worlds with Unity and C#, focusing on optimized gameplay mechanics, robust architecture, and clean, performant code.</p>
                 <p>My toolkit includes Unity's URP, multiplayer networking (Netcode), AI behavior trees, physics systems, and shader development.</p>
                 <p>
-                    <a href="#" download>Download CV</a>
+                    <a href="https://www.linkedin.com/in/ronish-neupane/" target="_blank" rel="noopener noreferrer">Know About Me</a>
                 </p>
             </section>
 
@@ -254,7 +294,7 @@
             <section id="projects" class="content-panel">
                 <h2>$ initialize_level("projects")</h2>
                 
-                <h3><a href=https://play.google.com/store/apps/details?id=com.DarkMatterGames.SpriteNInja&pcampaignid=web_share" target="_blank" rel="noopener noreferrer">Ninja Hattori Mobile Game</a></h3>
+                <h3><a href="https://play.google.com/store/apps/details?id=com.DarkMatterGames.SpriteNInja&pcampaignid=web_share" target="_blank" rel="noopener noreferrer">Ninja Hattori Mobile Game</a></h3>
                 <p class="meta-info">Mobile Platformer @ Dark Matter | 700k+ downloads</p>
                 <p>Contributed to core gameplay mechanics and performance profiling for Android. Reduced build size and improved frame rates on low-end devices.</p>
                 <div><span class="tag">Unity</span> <span class="tag">C#</span> <span class="tag">Mobile Optimization</span></div>
@@ -296,17 +336,17 @@
 
             <!-- CONTACT SECTION -->
             <section id="contact" class="content-panel">
-                <h2>$ exec("get_in_touch")</h2>
+                <h2>$ start("get_in_touch")</h2>
                 <p>I'm always open to discussing new projects, creative ideas, or opportunities with an ambitious team.</p>
                 <p>
                     <a href="mailto:your-email@example.com">Say Hello</a>
                 </p>
             </section>
-
-            <footer>
-                Designed & Built by Ronish Neupane
-            </footer>
         </main>
+        
+        <footer>
+            Website of Ronish Neupane
+        </footer>
     </div>
 
     <script>
@@ -324,7 +364,6 @@
                     const targetId = this.getAttribute('href').substring(1);
                     const targetPanel = document.getElementById(targetId);
                     
-                    // SMOOTHER TRANSITION LOGIC
                     document.body.classList.add('is-transitioning'); 
                     
                     const activePanel = document.querySelector('.content-panel.is-active');
@@ -335,17 +374,15 @@
                     currentActiveLink.classList.remove('active');
                     this.classList.add('active');
 
-                    // After a short delay, start fading in the new content for a better crossfade
                     setTimeout(() => {
                         if (targetPanel) {
                             targetPanel.classList.add('is-active');
                         }
-                    }, 150); // Small delay to start the crossfade smoothly
+                    }, 150); 
 
-                    // After the main transition is complete, restore the divider line
                     setTimeout(() => {
                         document.body.classList.remove('is-transitioning');
-                    }, 500); // This duration MUST match the CSS transition-duration
+                    }, 500);
                 });
             });
         });

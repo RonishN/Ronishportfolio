@@ -1,410 +1,725 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ronish Neupane | Game Developer</title>
-    <!-- Minimalist Font -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>Ronish Neupane | QA Engineer</title>
+    <meta name="description"
+        content="Ronish Neupane, QA Engineer with a game development background. Projects, experience and contact.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        /* Basic Setup and Typography */
-        body {
-            font-family: 'Roboto Mono', monospace;
-            background-color: #ffffff;
-            color: #333;
-            margin: 0;
-            padding: 8vh 0;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            min-height: 100vh;
-            box-sizing: border-box;
-            transition: background-color 0.5s ease-in-out;
+        :root {
+            --bg: #fff;
+            --text: #2b2b2b;
+            --strong: #000;
+            --muted: #666;
+            --faint: #8a8a8a;
+            --line: #bbb;
+            --line-soft: #e0e0e0;
+            --chip: #f0f0f0;
+            --active: #e8e8e8;
+            --focus: #1a56db;
+            --nav-w: 220px;
+            --gap: 50px;
         }
 
-        /* Main container for the two-column layout */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-padding-top: 72px;
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Roboto Mono', ui-monospace, Menlo, Consolas, monospace;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            -webkit-text-size-adjust: 100%;
+            padding: clamp(24px, 8vh, 80px) 0 32px;
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+        }
+
+        a {
+            color: inherit;
+        }
+
+        :focus-visible {
+            outline: 2px solid var(--focus);
+            outline-offset: 3px;
+            border-radius: 3px;
+        }
+
+        /* ---------- Layout ---------- */
         .container {
-            display: flex;
+            display: grid;
+            grid-template-columns: var(--nav-w) 1px minmax(0, 1fr);
+            column-gap: var(--gap);
             width: 90%;
             max-width: 1100px;
-            position: relative;
+            margin: 0 auto;
         }
 
-        /* Left Column: Navigation */
-        .navigation {
-            width: 220px;
-            padding-right: 40px;
-            flex-shrink: 0;
+        .divider {
+            background: var(--line);
         }
-       
+
+        /* ---------- Navigation ---------- */
+        .navigation {
+            position: sticky;
+            top: 8vh;
+            align-self: start;
+        }
+
         .logo {
             font-size: 1.5rem;
             font-weight: 700;
-            margin-bottom: 2em;
+            line-height: 1.3;
+            margin: 0 0 1.6em;
+            color: var(--strong);
         }
 
         .nav-menu {
             list-style: none;
-            padding: 0;
             margin: 0;
+            padding: 0;
         }
 
         .nav-menu li {
-            margin-bottom: 0.8em;
+            margin-bottom: .8em;
         }
 
-        .nav-menu a {
-            text-decoration: none;
-            color: #333;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.2s ease, color 0.2s ease;
+        .nav-link {
             display: inline-block;
             padding: 4px 6px;
             margin: -4px -6px;
             border-radius: 3px;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: background-color .2s, color .2s;
         }
-       
-        .nav-menu a.active {
-            color: #000;
-            background-color: #e8e8e8;
+
+        .nav-link:hover {
+            background: #f4f4f4;
         }
-       
-        .nav-menu a .hash {
+
+        .nav-link .hash {
             visibility: hidden;
             font-weight: 700;
         }
 
-        .nav-menu a.active .hash {
+        .nav-link[aria-current="page"] {
+            background: var(--active);
+            color: var(--strong);
+        }
+
+        .nav-link[aria-current="page"] .hash {
             visibility: visible;
         }
 
-        /* Center Column: The vertical line */
-        .divider {
-            width: 1px;
-            background-color: #bbb; 
-            margin-right: 50px;
-            transition: background-color 0.5s ease-in-out;
-        }
-
-        body.is-transitioning .divider {
-            background-color: #f5f5f5;
-        }
-
-        /* Right Column: Content Display Area */
+        /* ---------- Content ---------- */
         .content {
-            flex-grow: 1;
-            position: relative;
-            min-height: 550px;
-            padding-bottom: 2em; 
+            display: grid;
+            min-width: 0;
+            min-height: 520px;
+            align-content: start;
         }
-       
-        .content-panel {
+
+        /* all panels share one grid cell, so the container never collapses mid-fade */
+        .panel {
+            grid-area: 1 / 1;
             opacity: 0;
             visibility: hidden;
-            position: absolute;
-            width: 100%;
-            top: 0;
-            left: 0;
-            transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+            transition: opacity .35s ease, visibility .35s;
         }
-       
-        .content-panel.is-active {
+
+        .panel.is-active {
             opacity: 1;
             visibility: visible;
-            position: relative;
         }
-       
-        .content-panel h2 {
+
+        .panel>h2 {
+            margin: 0 0 1.5em;
             font-size: 1rem;
-            font-weight: normal;
-            margin-top: 0;
-            margin-bottom: 1.5em;
-            color: #555;
+            font-weight: 400;
+            color: var(--muted);
         }
 
-        .content-panel h3 {
+        p {
+            margin: 0 0 1em;
+            font-size: .95rem;
+            max-width: 62ch;
+        }
+
+        h3 {
+            margin: 0 0 .25em;
             font-size: 1.1rem;
-            margin-top: 2.5em;
-            margin-bottom: 1em;
+            line-height: 1.4;
+            color: var(--strong);
+        }
+
+        .lead {
+            font-size: 1.05rem;
+            color: var(--strong);
+        }
+
+        .panel p a,
+        .links a {
+            color: var(--strong);
             font-weight: 700;
+            text-underline-offset: 3px;
         }
-        
-        .content-panel h3 a {
-            color: #000;
+
+        /* ---------- About: quick facts ---------- */
+        .facts {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px 28px;
+            margin: 2em 0;
+            padding: 24px 0;
+            border-block: 1px solid var(--line-soft);
+            font-size: .92rem;
+        }
+
+        .fact {
+            min-width: 0;
+        }
+
+        .fact:last-child:nth-child(odd) {
+            grid-column: 1 / -1;
+        }
+
+        /* lone last item spans the row */
+        .fact dt {
+            margin-bottom: 4px;
+            color: var(--muted);
+            font-size: .76rem;
+            letter-spacing: .08em;
+            text-transform: uppercase;
+        }
+
+        .fact dd {
+            margin: 0;
+            color: var(--strong);
+            line-height: 1.55;
+        }
+
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: .4em 1.5em;
+            font-size: .9rem;
+        }
+
+        /* ---------- Projects ---------- */
+        .project {
+            padding: 1.6em 0;
+            border-top: 1px solid var(--line-soft);
+        }
+
+        .project:first-of-type {
+            border-top: 0;
+            padding-top: 0;
+        }
+
+        .project h3 a {
             text-decoration: none;
-            border-bottom: 2px solid #e0e0e0;
-            transition: border-color 0.2s ease;
+            border-bottom: 2px solid var(--line-soft);
+            transition: border-color .2s;
         }
 
-        .content-panel h3 a:hover {
-            border-color: #333;
+        .project h3 a:hover {
+            border-color: var(--strong);
         }
 
-        .content-panel p {
-            font-size: 0.95rem;
-            line-height: 1.9;
-            max-width: 600px;
+        .meta {
+            margin: 0 0 .8em;
+            font-size: .85rem;
+            color: var(--muted);
         }
-        
-        .content-panel .tag {
-            display: inline-block;
-            background-color: #f0f0f0;
-            padding: 4px 8px;
-            font-size: 0.8rem;
+
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: .6em;
+        }
+
+        .tag {
+            padding: 2px 8px;
+            background: var(--chip);
             border-radius: 4px;
-            margin-right: 8px;
-            margin-bottom: 8px;
+            font-size: .8rem;
+            line-height: 1.7;
         }
 
-        .content-panel .meta-info {
-             font-size: 0.85rem;
-             color: #666;
-             margin-top: -0.5em;
-             margin-bottom: 1.5em;
-        }
-
-        .content-panel a {
-             color: #000;
-             font-weight: 700;
-             text-decoration: underline;
-        }
-
-        /* Experience Timeline Styles */
+        /* ---------- Experience timeline ---------- */
         .timeline {
             position: relative;
-            padding-left: 30px;
-            margin-top: 2em;
+            margin: 0;
+            padding: 0 0 0 30px;
+            list-style: none;
         }
 
         .timeline::before {
             content: '';
             position: absolute;
             left: 5px;
-            top: 5px;
-            bottom: 5px;
+            top: 8px;
+            bottom: 8px;
             width: 2px;
-            background: #e0e0e0;
+            background: var(--line-soft);
         }
 
-        .timeline-item {
+        .timeline li {
             position: relative;
-            margin-bottom: 2em;
+            margin-bottom: 1.8em;
         }
-        
-        .timeline-item::before {
+
+        .timeline li::before {
             content: '';
             position: absolute;
-            left: -25px;
-            top: 5px;
-            height: 12px;
+            left: -31px;
+            top: 7px;
             width: 12px;
-            background-color: #333;
+            height: 12px;
             border-radius: 50%;
-            border: 2px solid #fff;
+            background: var(--bg);
+            border: 2px solid var(--faint);
         }
-        
-        .timeline h3 {
-             margin-top: 0;
-             margin-bottom: 0.25em;
+
+        .timeline li.current::before {
+            background: var(--strong);
+            border-color: var(--strong);
+        }
+
+        .timeline .meta {
+            margin: 0;
+        }
+
+        .timeline .group-label {
+            margin: 2em 0 1em -30px;
+            font-size: .85rem;
+            color: var(--muted);
+        }
+
+        /* ---------- Contact ---------- */
+        .copy-btn {
+            font: inherit;
+            font-size: .9rem;
+            font-weight: 700;
+            padding: 6px 12px;
+            cursor: pointer;
+            background: var(--bg);
+            color: var(--strong);
+            border: 2px solid var(--strong);
+            border-radius: 4px;
+            transition: background-color .2s, color .2s;
+        }
+
+        .copy-btn:hover {
+            background: var(--strong);
+            color: var(--bg);
+        }
+
+        .contact-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px 20px;
+            margin-top: 1.5em;
+        }
+
+        .contact-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px 20px;
+            margin-top: 1.5em;
         }
 
         footer {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            font-size: 0.8rem;
-            color: #888;
+            margin-top: 3em;
+            font-size: .8rem;
+            color: var(--faint);
         }
 
-        /* --- RESPONSIVENESS: SHRINK DESIGN, DON'T RE-STACK --- */
+        /* ---------- Responsive ---------- */
+        /* Tablet: same two-column design, just tighter */
         @media (max-width: 900px) {
-            body {
-                /* Reduce vertical padding to give more screen real estate */
-                padding: 6vh 0;
-            }
-            .navigation {
-                /* Make the nav column narrower */
-                width: 140px;
-                padding-right: 20px;
+            :root {
+                --nav-w: 150px;
+                --gap: 28px;
             }
 
             .logo {
-                font-size: 1.3rem; /* Slightly smaller logo text */
+                font-size: 1.25rem;
             }
 
-            .nav-menu a {
-                font-size: 0.9rem; /* Slightly smaller nav text */
+            .nav-link {
+                font-size: .9rem;
             }
 
-            .divider {
-                 /* Reduce space next to the divider */
-                margin-right: 25px;
-            }
-
-            .content {
-                min-height: auto; /* Allow height to be more flexible */
-            }
-            
-            .content-panel h3 {
-                font-size: 1.05rem; /* Slightly smaller titles */
-            }
-
-            .content-panel p {
-                 /* Slightly smaller body text for better fit */
-                font-size: 0.9rem;
-                line-height: 1.8;
+            p {
+                font-size: .9rem;
             }
         }
 
+        /* Phone: nav becomes a sticky top bar; the "#" active marker is kept */
+        @media (max-width: 680px) {
+            body {
+                padding-top: 0;
+            }
+
+            .container {
+                display: block;
+                width: 100%;
+            }
+
+            .divider {
+                display: none;
+            }
+
+            .navigation {
+                position: sticky;
+                top: 0;
+                z-index: 10;
+                background: var(--bg);
+                padding: calc(12px + env(safe-area-inset-top)) 20px 0;
+                border-bottom: 1px solid var(--line-soft);
+            }
+
+            .logo {
+                font-size: 1.15rem;
+                margin-bottom: .6em;
+            }
+
+            .nav-menu {
+                display: flex;
+                gap: 6px;
+                overflow-x: auto;
+                margin: 0 -20px;
+                padding: 0 20px 12px;
+                scrollbar-width: none;
+            }
+
+            .nav-menu::-webkit-scrollbar {
+                display: none;
+            }
+
+            .nav-menu li {
+                margin: 0;
+            }
+
+            .nav-link {
+                margin: 0;
+                padding: 6px 10px;
+                font-size: .85rem;
+            }
+
+            .nav-link .hash {
+                display: none;
+            }
+
+            .nav-link .num {
+                display: none;
+            }
+
+            .content {
+                padding: 28px 20px 0;
+                min-height: 70vh;
+            }
+
+            .facts {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+
+            .facts dd {
+                margin-bottom: .8em;
+            }
+
+            .timeline .meta,
+            .meta {
+                font-size: .8rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+                transition: none !important;
+            }
+        }
     </style>
 </head>
+
 <body>
 
     <div class="container">
-        <!-- Left Navigation Panel -->
-        <nav class="navigation">
+        <nav class="navigation" aria-label="Sections">
             <div class="logo">Ronish Neupane</div>
             <ul class="nav-menu">
-                <li><a href="#about" class="nav-link active"><span class="hash">#</span> 00I | about</a></li>
-                <li><a href="#projects" class="nav-link"><span class="hash">#</span> 0II | projects</a></li>
-                <li><a href="#experience" class="nav-link"><span class="hash">#</span> III | experience</a></li>
-                <li><a href="#contact" class="nav-link"><span class="hash">#</span> 0IV | contact</a></li>
+                <li><a class="nav-link" href="#about"><span class="hash">#</span><span class="num"> 01 |</span>
+                        about</a></li>
+                <li><a class="nav-link" href="#projects"><span class="hash">#</span><span class="num"> 02 |</span>
+                        projects</a>
+                </li>
+                <li><a class="nav-link" href="#experience"><span class="hash">#</span><span class="num"> 03 |</span>
+                        experience</a></li>
+                <li><a class="nav-link" href="#contact"><span class="hash">#</span><span class="num"> 04 |</span>
+                        contact</a>
+                </li>
             </ul>
         </nav>
 
-        <!-- Vertical Divider -->
-        <div class="divider"></div>
+        <div class="divider" aria-hidden="true"></div>
 
-        <!-- Right Content Panel -->
         <main class="content">
-            <!-- ABOUT SECTION -->
-            <section id="about" class="content-panel is-active">
-                <h2>$ load scene("about")</h2>
-                <p>I’m Ronish Neupane, a QA Engineer focused on software quality, test automation, and building reliable user experiences.</p>
-                <p>With a background in game development, I bring a developer’s mindset to testing exploring edge cases, validating functionality, and finding what others might miss.</p>
-                <p>
-                    <a href="https://www.linkedin.com/in/ronish-neupane/" target="_blank" rel="noopener noreferrer">Know About Me</a>
+
+            <!-- ABOUT -->
+            <section id="about" class="panel is-active" aria-labelledby="about-h">
+                <h2 id="about-h">$ load scene("about")</h2>
+                <p class="lead">I build and test digital products people can rely on.</p>
+                <p>I'm Ronish Neupane, a QA Engineer focused on software quality, test automation and reliable user
+                    experiences.
                 </p>
-            </section>
+                <p>With a background in game development, I bring a developer's mindset to testing: exploring edge
+                    cases,
+                    validating functionality and finding what others might miss.</p>
 
-            <!-- PROJECTS SECTION -->
-            <section id="projects" class="content-panel">
-                <h2>$ initialize_level("projects")</h2>
-                
-                <h3><a href="https://play.google.com/store/apps/details?id=com.DarkMatterGames.SpriteNInja&pcampaignid=web_share" target="_blank" rel="noopener noreferrer">Ninja Hattori Mobile Game</a></h3>
-                <p class="meta-info">Mobile Platformer @ Dark Matter | 700k+ downloads</p>
-                <p>Contributed to core gameplay mechanics and performance profiling for Android. Reduced build size and improved frame rates on low-end devices.</p>
-                <div><span class="tag">Unity</span> <span class="tag">C#</span> <span class="tag">Mobile Optimization</span></div>
-                
-                <h3><a href="https://play.google.com/store/apps/details?id=com.Darkmatter.kidsage&pcampaignid=web_share" target="_blank" rel="noopener noreferrer">Kids Age - Learning App</a></h3>
-                <p class="meta-info">Educational App @ Dark Matter | 1k+ downloads</p>
-                <p>Implemented several interactive learning modules for an international audience, including letter tracing and object counting, ensuring a responsive and child-friendly UI.</p>
-                <div><span class="tag">Unity</span> <span class="tag">C#</span> <span class="tag">Educational</span> <span class="tag">UI/UX</span></div>
-                
-                <h3><a href="https://play.google.com/store/apps/details?id=com.GameDevGamer.WordHoot&pcampaignid=web_share" target="_blank" rel="noopener noreferrer">Word Hoot - Word Game</a></h3>
-                <p class="meta-info">Mobile Puzzle Game | 200+ downloads</p>
-                <p>Developed core puzzle logic and the level progression system for this word-finding game with over 100 challenging levels.</p>
-                <div><span class="tag">Unity</span> <span class="tag">C#</span> <span class="tag">Game Logic</span></div>
+                <dl class="facts">
+                    <div class="fact">
+                        <dt>Role</dt>
+                        <dd>QA Engineer at ThreatsView, since January 2026</dd>
+                    </div>
+                    <div class="fact">
+                        <dt>Background</dt>
+                        <dd>Game Developer with Unity and C# experience</dd>
+                    </div>
+                    <div class="fact">
+                        <dt>Shipped</dt>
+                        <dd>3 published mobile games and apps on Google Play</dd>
+                    </div>
+                    <div class="fact">
+                        <dt>Focus</dt>
+                        <dd>Manual and automated testing, edge-case coverage, clear bug reporting, and reliable user
+                            experiences</dd>
+                    </div>
+                    <div class="fact">
+                        <dt>Tools</dt>
+                        <dd>Playwright, Unity, C#, Jira, and Git</dd>
+                    </div>
+                    <div class="fact">
+                        <dt>Currently exploring</dt>
+                        <dd>Web test automation, API testing, and security-focused QA</dd>
+                    </div>
+                    <div class="fact">
+                        <dt>Status</dt>
+                        <dd>Open to QA opportunities, learning and collaborations</dd>
+                    </div>
+                </dl> QA opportunities and collaborations</dd>
+                </dl>
 
-                <h3><a href="https://creepyug.darkmattergame.net/" target="_blank" rel="noopener noreferrer">First-Person PC Horror Game</a></h3>
-                <p class="meta-info">Company Project | In Development</p>
-                <p>Prototyping complex systems from scratch, featuring an AI behavior tree for enemy logic and a dynamic lighting engine for atmosphere.</p>
-                <div><span class="tag">Unity</span> <span class="tag">C#</span> <span class="tag">AI Behavior Trees</span> <span class="tag">URP</span></div>
-
-                <h3><a href="https://www.linkedin.com/in/ronish-neupane/" target="_blank" rel="noopener noreferrer">Unpublished & Game Jam Projects</a></h3>
-                <p class="meta-info">Company Project | In Development| Personal Projects | Game Jam</p>
-                <p>Beyond published titles, I have developed numerous prototypes exploring diverse genres, from physics-based puzzlers to narrative experiments, sharpening my rapid prototyping and creative problem-solving skills.</p>
-            </section>
-
-            <!-- EXPERIENCE SECTION -->
-            <section id="experience" class="content-panel">
-                <h2>$ render_timeline("experience")</h2>
-                <div class="timeline">
-                     <div class="timeline-item">
-                        <h3>QA Engineer</h3>
-                        <p class="meta-info">ThreatsView | Jan 2026 - Present</p>
-                    </div>
-                    <div class="timeline-item">
-                        <h3>Game Developer and QA Engineer</h3>
-                        <p class="meta-info">OcherByte | Jul 2025 - Nov 2025</p>
-                    </div>
-                    <div class="timeline-item">
-                        <h3>Game Development Intern</h3>
-                        <p class="meta-info">Dark Matter Game Production | Jan 2024 - Jun 2025</p>
-                    </div>
-                    <div class="timeline-item">
-                        <h3>Bakery Assistant </h3>
-                        <p class="meta-info">Local shop | Nov 2023 - Dec 2023</p>
-                    </div>
-                    <div class="timeline-item">
-                        <h3>Kitechen Helper</h3>
-                        <p class="meta-info">Chef Burger, lagankhel | Sep 2023 - Oct 2023</p>
-                    </div>
-                     <div class="timeline-item">
-                        <h3>Call Canter</h3>
-                        <p class="meta-info">online plant seed selling company | Jun 2023 - Aug 2023</p>
-                    </div>
+                <div class="links">
+                    <a href="#projects" data-go>See projects</a>
+                    <a href="#experience" data-go>See experience</a>
+                    <a href="https://www.linkedin.com/in/ronish-neupane/" target="_blank"
+                        rel="noopener noreferrer">LinkedIn</a>
+                    <a href="https://mail.google.com/mail/?view=cm&to=Ronishn.27@gmail.com&su=Hello%20Ronish"
+                        target="_blank" rel="noopener noreferrer">Email me</a>
                 </div>
             </section>
 
-            <!-- CONTACT SECTION -->
-            <section id="contact" class="content-panel">
-                <h2>$ start("get_in_touch")</h2>
-                <p>I'm open to QA opportunities, interesting projects, and connecting with people who enjoy building reliable software.</p>
-                <p>
-                    <a href="mailto:Ronishn.27@gmail.com">Say Hello</a>
-                </p>
+            <!-- PROJECTS -->
+            <section id="projects" class="panel" aria-labelledby="projects-h">
+                <h2 id="projects-h">$ initialize_level("projects")</h2>
+                <p class="lead">Projects that show my development and quality mindset.</p>
+
+                <article class="project">
+                    <h3><a href="https://play.google.com/store/apps/details?id=com.DarkMatterGames.SpriteNInja&pcampaignid=web_share"
+                            target="_blank" rel="noopener noreferrer">Ninja Hattori Mobile Game</a></h3>
+                    <p class="meta">Mobile platformer at Dark Matter | 700k+ downloads</p>
+                    <p>Contributed to core gameplay mechanics and performance profiling for Android. Reduced build size
+                        and
+                        improved frame rates on low-end devices.</p>
+                    <div class="tags"><span class="tag">Unity</span><span class="tag">C#</span><span class="tag">Mobile
+                            Optimization</span></div>
+                </article>
+
+                <article class="project">
+                    <h3><a href="https://play.google.com/store/apps/details?id=com.Darkmatter.kidsage&pcampaignid=web_share"
+                            target="_blank" rel="noopener noreferrer">Kids Age - Learning App</a></h3>
+                    <p class="meta">Educational app at Dark Matter | 1k+ downloads</p>
+                    <p>Implemented interactive learning modules for an international audience, including letter tracing
+                        and object
+                        counting, with a responsive, child-friendly UI.</p>
+                    <div class="tags"><span class="tag">Unity</span><span class="tag">C#</span><span
+                            class="tag">Educational</span><span class="tag">UI/UX</span></div>
+                </article>
+
+                <article class="project">
+                    <h3><a href="https://play.google.com/store/apps/details?id=com.GameDevGamer.WordHoot&pcampaignid=web_share"
+                            target="_blank" rel="noopener noreferrer">Word Hoot - Word Game</a></h3>
+                    <p class="meta">Mobile puzzle game | 200+ downloads</p>
+                    <p>Developed the core puzzle logic and level progression for a word-finding game with over 100
+                        levels.</p>
+                    <div class="tags"><span class="tag">Unity</span><span class="tag">C#</span><span class="tag">Game
+                            Logic</span>
+                    </div>
+                </article>
+
+                <article class="project">
+                    <h3><a href="https://creepyug.darkmattergame.net/" target="_blank"
+                            rel="noopener noreferrer">First-Person PC
+                            Horror Game</a></h3>
+                    <p class="meta">Company project | In development</p>
+                    <p>Prototyping complex systems from scratch, including an AI behavior tree for enemy logic and a
+                        dynamic
+                        lighting setup for atmosphere.</p>
+                    <div class="tags"><span class="tag">Unity</span><span class="tag">C#</span><span class="tag">AI
+                            Behavior
+                            Trees</span><span class="tag">URP</span></div>
+                </article>
+
+                <article class="project">
+                    <h3><a href="https://www.linkedin.com/in/ronish-neupane/" target="_blank"
+                            rel="noopener noreferrer">Unpublished and Game Jam Projects</a></h3>
+                    <p class="meta">Personal projects | Game jams</p>
+                    <p>Beyond published titles, I have built many prototypes across genres, from physics-based puzzlers
+                        to
+                        narrative experiments, sharpening rapid prototyping and problem-solving.</p>
+                </article>
+                <article class="project">
+                    <h3><a href="https://www.linkedin.com/company/threatsview" target="_blank"
+                            rel="noopener noreferrer">ThreatsView Automation</a></h3>
+                    <p class="meta">ThreatsView project | In development</p>
+                    <p>Built the Playwright test automation suite for ThreatsView, covering key user flows so
+                        regressions are
+                        caught before release instead of by users.</p>
+                    <div class="tags"><span class="tag">Unity</span><span class="tag">C#</span><span class="tag">AI
+                            Behavior
+                            Trees</span><span class="tag">URP</span></div>
+                </article>
             </section>
+
+
+            <!-- EXPERIENCE -->
+            <section id="experience" class="panel" aria-labelledby="experience-h">
+                <h2 id="experience-h">$ render_timeline("experience")</h2>
+                <p class="lead">A path from game development into quality engineering.</p>
+                <p>I know how products get built, so I know where they break.</p>
+                <ol class="timeline" style="margin-top:2em">
+                    <li class="current">
+                        <h3>QA Engineer</h3>
+                        <p class="meta">ThreatsView | Jan 2026 - Present</p>
+                    </li>
+                    <li>
+                        <h3>Game Developer and QA Engineer</h3>
+                        <p class="meta">OcherByte | Jul 2025 - Nov 2025</p>
+                    </li>
+                    <li>
+                        <h3>Game Development Intern</h3>
+                        <p class="meta">Dark Matter Game Production | Jan 2024 - Jun 2025</p>
+                    </li>
+                    <li>
+                        <h3>Bakery Assistant</h3>
+                        <p class="meta">Local shop | Nov 2023 - Dec 2023</p>
+                    </li>
+                    <li>
+                        <h3>Kitchen Helper</h3>
+                        <p class="meta">Chef Burger, Lagankhel | Sep 2023 - Oct 2023</p>
+                    </li>
+                    <li>
+                        <h3>Call Center Agent</h3>
+                        <p class="meta">Online plant seed company | Jun 2023 - Aug 2023</p>
+                    </li>
+                </ol>
+            </section>
+
+            <!-- CONTACT -->
+            <section id="contact" class="panel" aria-labelledby="contact-h">
+                <h2 id="contact-h">$ start("get_in_touch")</h2>
+                <p class="lead">Let's build something reliable.</p>
+                <p>I'm open to QA opportunities, interesting projects, and connecting with people who enjoy building
+                    reliable
+                    software.</p>
+                <div class="contact-row">
+                    <a href="https://mail.google.com/mail/?view=cm&to=Ronishn.27@gmail.com&su=Hello%20Ronish"
+                        target="_blank" rel="noopener noreferrer">Ronishn.27@gmail.com</a>
+                    <button type="button" class="copy-btn" id="copy-email" aria-live="polite">
+                        Copy email
+                    </button>
+                    <a href="https://www.linkedin.com/in/ronish-neupane/" target="_blank"
+                        rel="noopener noreferrer">LinkedIn</a>
+                </div>
+            </section>
+
+            <footer>Website of Ronish Neupane</footer>
         </main>
-        
-        <footer>
-            Website of Ronish Neupane
-        </footer>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            const contentPanels = document.querySelectorAll('.content-panel');
+        (() => {
+            const links = [...document.querySelectorAll('.nav-link')];
+            const panels = [...document.querySelectorAll('.panel')];
+            const ids = panels.map(p => p.id);
 
-            navLinks.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-
-                    const currentActiveLink = document.querySelector('.nav-link.active');
-                    if (currentActiveLink === this) return; 
-
-                    const targetId = this.getAttribute('href').substring(1);
-                    const targetPanel = document.getElementById(targetId);
-                    
-                    document.body.classList.add('is-transitioning'); 
-                    
-                    const activePanel = document.querySelector('.content-panel.is-active');
-                    if (activePanel) {
-                        activePanel.classList.remove('is-active');
-                    }
-                    
-                    currentActiveLink.classList.remove('active');
-                    this.classList.add('active');
-
-                    setTimeout(() => {
-                        if (targetPanel) {
-                            targetPanel.classList.add('is-active');
-                        }
-                    }, 150); 
-
-                    setTimeout(() => {
-                        document.body.classList.remove('is-transitioning');
-                    }, 500);
+            function show(id, { push = true } = {}) {
+                if (!ids.includes(id)) id = ids[0];
+                panels.forEach(p => p.classList.toggle('is-active', p.id === id));
+                links.forEach(l => {
+                    const on = l.getAttribute('href') === '#' + id;
+                    on ? l.setAttribute('aria-current', 'page') : l.removeAttribute('aria-current');
+                    if (on) l.scrollIntoView({ block: 'nearest', inline: 'center' });
                 });
+                if (push && location.hash !== '#' + id) history.pushState(null, '', '#' + id);
+                window.scrollTo({ top: 0 });
+            }
+
+            // Nav links and in-page links (data-go) share one handler
+            document.addEventListener('click', e => {
+                const a = e.target.closest('.nav-link, [data-go]');
+                if (!a) return;
+                e.preventDefault();
+                show(a.getAttribute('href').slice(1));
             });
-        });
+
+            // Back/forward buttons and direct links like site.com/#projects
+            window.addEventListener('popstate', () => show(location.hash.slice(1), { push: false }));
+            show(location.hash.slice(1), { push: false });
+
+            // Copy email
+            const copyBtn = document.getElementById("copy-email");
+            const email = "Ronishn.27@gmail.com";
+
+            if (copyBtn) {
+                copyBtn.addEventListener("click", async () => {
+                    try {
+                        await navigator.clipboard.writeText(email);
+                        copyBtn.textContent = "Copied!";
+                    } catch (error) {
+                        copyBtn.textContent = "Copy failed";
+                        console.error("Clipboard copy failed:", error);
+                    }
+
+                    setTimeout(() => {
+                        copyBtn.textContent = "Copy email";
+                    }, 1800);
+                });
+            }
+        })();
     </script>
-
 </body>
+
 </html>
-
-
